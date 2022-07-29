@@ -18,7 +18,7 @@ class App extends React.Component {
   }
 
   addItem = async (item) => {
-    await post(`${API_SERVER}/items`, item);
+    await axios.post(`${API_SERVER}/items/:id`, item);
     this.getItems();
   }
 
@@ -26,6 +26,19 @@ class App extends React.Component {
     const response = await axios.get(`${API_SERVER}/items`);
     const items = response.data;
     this.setState({ items });
+  }
+
+  deleteItem = async (item) => {
+    await axios.delete(`${API_SERVER}/items/:id`, item);
+    this.removefromState(item) 
+  }
+
+  removefromState = (item) => {
+    const newArray = this.state.items.filter(element => {
+      console.log(element, item)
+      return !(element._id === item.id);
+    })
+    this.setState({items: newArray})
   }
 
   async componentDidMount() {
